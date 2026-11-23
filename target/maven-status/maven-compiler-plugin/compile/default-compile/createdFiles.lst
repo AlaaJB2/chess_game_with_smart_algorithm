@@ -1,0 +1,5 @@
+com\lab\board3d\BoardSplitter.class
+com\lab\board3d\BoardLoader$Board.class
+com\lab\board3d\BoardLoader.class
+com\lab\board3d\BoardSplitter$Buf.class
+com\lab\board3d\BoardSplitter$Result.class
