@@ -39,7 +39,7 @@ public final class SoundPlayer implements AutoCloseable {
 
     /** أسماء الملفات المقبولة لكل مؤثر (الاسم الثاني لأن الملف المرفق فيه خطأ إملائي Gmae). */
     private static final Map<GameSound, List<String>> FILES = Map.of(
-            GameSound.GAME_START, List.of("Game_start.wav", "Gmae_start.wav"),
+            GameSound.GAME_START, List.of("Game_start.wav", "Gmae start.wav"),
             GameSound.MOVE, List.of("Move.wav"),
             GameSound.CAPTURE, List.of("Capture.wav"),
             GameSound.CHECK, List.of("Check.wav"),

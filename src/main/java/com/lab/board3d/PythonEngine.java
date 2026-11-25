@@ -124,7 +124,9 @@ public final class PythonEngine implements GameController.Engine, AutoCloseable 
     private void ensureStarted() throws IOException, InterruptedException {
         if (process != null && process.isAlive()) return;
 
-        ProcessBuilder pb = new ProcessBuilder(pythonCommand, "-u", script.getFileName().toString());
+        ProcessBuilder pb = script.getFileName().toString().endsWith(".exe")
+                ? new ProcessBuilder(script.toAbsolutePath().toString())
+                : new ProcessBuilder(pythonCommand, "-u", script.getFileName().toString());
         pb.directory(script.toAbsolutePath().getParent().toFile());
         pb.environment().put("PYTHONIOENCODING", "utf-8");
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);   // أخطاء Python تظهر في console

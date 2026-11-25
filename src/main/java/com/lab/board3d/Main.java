@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
+import java.nio.file.Files;
 /**
  * الخطوة 4: الرقعة + 32 حجراً (ماهوغني وكريمي)، والنقر على حجر ثم على مربع لتحريكه.
  *
@@ -35,7 +35,9 @@ public class Main extends Application {
     private static final double HEIGHT = 750;
 
     // ---- ملفات STL (داخل مجلد models بجانب pom.xml) ----
-    private static final Path MODELS_DIR = Path.of("models");
+    // مجلد اللعبة: يضبطه jpackage عند التنصيب، وفي IntelliJ يكون المجلد الحالي
+    private static final Path HOME = Path.of(System.getProperty("board3d.home", "."));
+    private static final Path MODELS_DIR = HOME.resolve("models");
     private static final String BOARD_FILE = "_chiquier_final.stl";
 
     // ---- إعدادات الرقعة ----
@@ -79,10 +81,15 @@ public class Main extends Application {
             world.getChildren().add(view.getNode());
             game = new GameController(view);
             game.setStatusListener(s -> stage.setTitle("Chess - " + s + "   [N = لعبة جديدة | M = كتم]"));
-            python = new PythonEngine("python", Path.of("python", "engine_server.py"), 10_000);
+            Path engineExe = HOME.resolve("engine").resolve("engine_server.exe");
+            Path engineScript = HOME.resolve("python").resolve("engine_server.py");
+            Path enginePath = Files.exists(engineExe) ? engineExe : engineScript;
+            System.out.println("[Main] engine: " + enginePath.toAbsolutePath());
+            python = new PythonEngine("python", enginePath, 3600_000L);
+            //python = new PythonEngine("python", enginePath, 10_000);
             game.setEngine(python);
             game.setPromotionChooser(PromotionDialog::ask);
-            sounds = new SoundPlayer(Path.of("sounds"));
+            sounds = new SoundPlayer(HOME.resolve("sounds"));
             game.setSoundListener(sounds::play);
             game.setOrientationListener(color -> rotateY.setAngle(color == PieceColor.WHITE ? 0 : 180));
             python.warmUp();
